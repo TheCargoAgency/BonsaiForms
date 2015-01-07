@@ -1,0 +1,95 @@
+<?php
+/** @jsonSchema
+ * {
+ *     "title":"Content Tile",
+ *     "type":"object",
+ *     "additionalProperties":false,
+ *     "properties":
+ *     {
+ *         "label":
+ *         {
+ *             "type":"string",
+ *             "title":"Label"
+ *         },
+ *         "name":
+ *         {
+ *             "type":"string",
+ *             "required":true,
+ *             "title":"Name"
+ *         },
+ *         "type":
+ *         {
+ *             "title": "Input Type",
+ *             "desc": "Type of the input field",
+ *             "type": "string",
+ *             "required": true,
+ *             "enum":
+ *             [
+ *                 "text",
+ *                 "password",
+ *                 "radio",
+ *                 "checkbox",
+ *                 "submit",
+ *                 "button"
+ *             ]
+ *         },
+ *         "maxlength":
+ *         {
+ *             "type":"integer",
+ *             "title":"Maximum Length"
+ *         },
+ *         "hidden":
+ *         {
+ *             "type":"Boolean",
+ *             "title":"Hidden Field"
+ *         },
+ *         "validators":
+ *         {
+ *             "desc": "List of validators to run against the field's data",
+ *             "title": "Validators",
+ *             "type": "array",
+ *             "items":
+ *             [
+ *                 {
+ *                     "type":"object",
+ *                     "properties":
+ *                     {
+ *                         "validator":
+ *                         {
+ *                             "type":"string",
+ *                             "title":"Validator",
+ *                             "desc":"Validation object to use",
+ *                             "required":true
+ *                         }
+ *                     }
+ *                 }
+ *             ]
+ *         }
+ *     }
+ * }
+ */
+
+$data->class .= sprintf(' %s', \BonsaiForm\Module\Registry::get('css.formfield'));
+
+if (is_object($content)):
+    ?>
+
+    <div <?= $this->getAttributes($data, ['id', 'class']) ?> <?= $this->getEditData($data) ?>>
+    <?php
+        $this->printField($content, ['name','label'], '<label for="%s">%s</label>');
+    ?>
+        <input <?= $this->getAttributes($content, ['name','type','maxlength','hidden']) ?><?= $this->printField($content, 'name', ' value="{{formvalues>%s}}"'); ?> />
+    </div>
+
+    <?php
+else:
+
+    \Bonsai\Module\Registry::log("Strict Standards: Content provided to the input template must be a stdClass object", __FILE__, __METHOD__, __LINE__);
+    
+    ?>
+    <div class="<?= $data->class; ?>">
+    <?= $content; ?>
+    </div>
+<?php
+endif;
+?>

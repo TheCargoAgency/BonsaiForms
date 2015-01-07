@@ -1,0 +1,6 @@
+<?php
+$data->class .= sprintf(' %s', \BonsaiForm\Module\Registry::get('css.fieldset'));
+?>
+<form <?= $this->getAttributes($data, ['id', 'class']) ?> <?= $this->getEditData($data) ?>>
+    <?= $content; ?>
+</form>

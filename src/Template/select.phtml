@@ -1,0 +1,100 @@
+<?php
+/** @jsonSchema
+ * {
+ *     "title":"Content Tile",
+ *     "type":"object",
+ *     "additionalProperties":false,
+ *     "properties":
+ *     {
+ *         "label":
+ *         {
+ *             "type":"string",
+ *             "title":"Label"
+ *         },
+ *         "name":
+ *         {
+ *             "type":"string",
+ *             "required":true,
+ *             "title":"Name"
+ *         },
+ *         "placeholder":
+ *         {
+ *             "type":"boolean",
+ *             "required":true,
+ *             "title":"Options Placeholder"
+ *         },
+ *         "options":
+ *         {
+ *             "title":"Options",
+ *             "type":"object",
+ *             "desc":"Options for the Select Box",
+ *             "additionalProperties":false,
+ *             "properties":
+ *             {
+ *                 "title":
+ *                 {
+ *                     "type":"string",
+ *                     "desc":"Display text for the option",
+ *                     "title":"Display Text",
+ *                     "required":true
+ *                 },
+ *                 "value":
+ *                 {
+ *                     "type":"string",
+ *                     "desc":"Value of the option",
+ *                     "title":"Value",
+ *                     "required":true
+ *                 }
+ *             }
+ *         },
+ *         "validators":
+ *         {
+ *             "desc": "List of validators to run against the field's data",
+ *             "title": "Validators",
+ *             "type": "array",
+ *             "items":
+ *             [
+ *                 {
+ *                     "type": "string",
+ *                     "title": "validator",
+ *                     "desc": "validator",
+ *                     "required": true
+ *                 }
+ *             ]
+ *         }
+ *     }
+ * }
+ */
+
+$data->class .= sprintf(' %s', \BonsaiForm\Module\Registry::get('css.formfield'));
+
+if (is_object($content)):
+    ?>
+
+    <div <?= $this->getAttributes($data, ['id', 'class']) ?> <?= $this->getEditData($data) ?>>
+    <?php
+        $this->printField($content, ['name','label'], '<label for="%s">%s</label>');
+    ?>
+        <select <?= $this->getAttributes($content, ['name']) ?>>
+            <?php
+            $this->printField($content, ['name','placeholder'], '{{%s}}');
+            foreach ($content->options as $option){
+                $this->printField($option, ['value','title'], '<option value="%1$s" {{formvalues>%1$s}}>%2$s</option>');
+                $this->printField($option, ['!value','title'], '<option {{formvalues>%1$s}}>%1$s</option>');
+            }
+            ?>
+        </select>
+    </div>
+
+    <?php
+else:
+
+    \Bonsai\Module\Registry::log("Strict Standards: Content provided to the input template must be a stdClass object", __FILE__, __METHOD__, __LINE__);
+    
+    ?>
+    <div class="<?= $data->class; ?>">
+    <?= $content; ?>
+    </div>
+<?php
+endif;
+?>
