@@ -9,7 +9,11 @@ class Grep implements Validator
     
     public function __construct($options)
     {
-        $this->mode = isset($options->mode) && in_array($options->mode, ['contains','starts','ends','is']) ? $options->mode : 'contains';
+        $this->mode = isset($options['mode']) && in_array($options['mode'], ['contains','starts','ends','is']) ? $options['mode'] : 'contains';
+        
+        $this->pattern = isset($options['pattern']) ? $options['pattern'] : '.+';
+        
+        $this->message = isset($options['message']) ? $options['message'] : 'The value does not match the pattern.';
         
         switch ($this->mode){
             case 'starts':
@@ -24,10 +28,6 @@ class Grep implements Validator
             default :
                 $this->pattern = "/{$this->pattern}/";
         }
-        
-        $this->pattern = isset($options->pattern) ? $options->pattern : '.+';
-        
-        $this->message = isset($options->message) ? $options->message : 'The value does not match the pattern.';
     }
     
     public function validate($value)
