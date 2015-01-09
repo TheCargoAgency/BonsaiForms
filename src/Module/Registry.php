@@ -78,9 +78,7 @@ class Registry
     }
 
     private function defineConstants(){
-        defined('Bonsai\DOCUMENT_ROOT') || define('Bonsai\DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
-        defined('Bonsai\PROJECT_ROOT') || define('Bonsai\PROJECT_ROOT', __DIR__ . '/../');
-        defined('Bonsai\SERVER_ROOT') || define('Bonsai\SERVER_ROOT', '');
+        defined('BonsaiForm\PROJECT_ROOT') || define('BonsaiForm\PROJECT_ROOT', __DIR__ . '/..');
     }    
     
     public function __get($name)
